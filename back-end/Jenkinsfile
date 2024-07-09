@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools{
-        maver 'Maven'//젠킨스 tools의 설정한 Maven의 이름
+        maven 'Maven'//젠킨스 tools의 설정한 Maven의 이름
     }
     environment{
         JAVA_HOME='C:\\dev\\java-11-openjdk-11.0.15.9-1'//자바가 설치된 경로
