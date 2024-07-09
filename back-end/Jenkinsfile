@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+
+    tools{
+        maver 'Maven'//젠킨스 tools의 설정한 Maven의 이름
+    }
+    environment{
+        JAVA_HOME='C:\\dev\\java-11-openjdk-11.0.15.9-1'//자바가 설치된 경로
+        PATH="${env.JAVA_HOME}\\bin;${env.PATH}"
+    }
+
+    // trigger{
+    //     pollSCM('H/6***1-5')
+    // }
+
+    stages {
+        stage('clone repository') {
+            steps {
+                git branch:'main',credentialsId:'github-token',
+                url:'https://github.com/sumin091/test_jenkins2.git'
+               
+            }
+        }
+        stage('build WAR'){
+            steps{
+                script{
+                    def mvnHome=tool name:'Maven', type:'hudson.tasks.Maven$MavenInstallation'
+                    withEnv(["MAVEN_HOME=${mvnHome}"]){
+                        //pom.xml에 version노드의 이름으로 WAR가 target directory에 생성
+                        bat "\"${mvnHome}\\bin\\mvn\" clean package-DskipTests"
+                    }
+                }
+            }
+        }
+    }
+
+
+}
